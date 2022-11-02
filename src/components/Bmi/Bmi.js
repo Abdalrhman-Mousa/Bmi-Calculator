@@ -1,84 +1,87 @@
 import './Bmi.css'
+import { useState } from 'react'
 
-import React from 'react';
+const Bmi = () => {
 
-class Bmi extends React.Component {
+    const [height, setHeight] = useState('');
+    const [weight, setWeight] = useState('');
 
-    constructor(props) {
-        super(props);
-        this.state = {'height': 0, 'weight': 0, 'info': "", 'val': 0}
+    const [bmiResult, setBmiResult] = useState('');
+
+    const [status, setStatus] = useState('');
+
+    function calculateBMI() {
+        let bmi = (703*(weight / ((height ) ** 2))).toFixed(2);
+        setBmiResult(bmi);
+
+        let bmiStatus = getStatus(bmi)
+        setStatus(bmiStatus);
+
+        setHeight('');
+        setWeight('');
+
     }
 
+    function getStatus(bmi) {
+        if (bmi < 18.5) return "Underweight"
+        else if (bmi >= 18.5 && bmi < 25) return "Healthy"
+        else if (bmi >= 25 && bmi < 30) return "Overweight"
+        else return "obese"
+    }
+
+    return (
+
+        <div className="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+            <div className="wrapper wrapper--w680">
+                <div className="card card-4">
+                    <div className="card-body">
+                        <h2 className="title"> BMI Calculator</h2>
+                        <form>
+                            <div className="row row-space">
+                                <div className="col-2">
+                                    <div className="input-group">
+                                        <label className="label">Hieght</label>
+                                        <input
+                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            id="height"
+                                            type="number"
+                                            placeholder="Height in inch"
+                                            value={height}
+                                            onChange={e => setHeight(e.target.value)} />
+                                    </div>
+                                </div>
+                                <div className="col-2">
+                                    <div className="input-group">
+                                        <label className="label">Weight</label>
+                                        <input
+                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                            id="weight"
+                                            type="number"
+                                            placeholder="Weight in lbs"
+                                            value={weight}
+                                            onChange={e => setWeight(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="p-t-15 text-center">
+                                <button className="btn btn--radius-2 btn--blue" type="button" onClick={calculateBMI} >Calculate</button>
+                            </div>
 
 
-    render() 
-    {
-      return (
-
-    <div className="bg text-center">
-
-  <div className="centered">
-   
-     <p className="firstLine"> B &nbsp; M &nbsp; I  </p>
-   
-    <p className="secondLine">Calculate Your BMI</p>
-
-    <form >
-
-    <p> <input className="InputStyle" placeholder="Enter Your Weight"  type={'text'} id="weight" name="weight"onChange={e => {
-                        this.setState({'weight': e.target.value})
-                    }}/> </p>
-    <p> <input className="InputStyle" placeholder="Enter Your Height"  type={'text'} id="height" name="height" onChange={e => {
-                        this.setState({'height': e.target.value})
-                    }}/> </p>
-    <button type="button" onClick={e => { this.calculateBmi()}} className="btn btn-outline-light" > Calculate</button>
-</form>
-
-
-
-
-
-<div class="form-body">
-        <div class="row">
-            <div class="form-holder">
-                <div class="form-content">
-                    <div class="form-items">
-                        <h3>BMI {this.state.val}</h3>
-                        <h2>{this.state.info}</h2>
-                        
+                            {bmiResult>15 && 
+                <div className="mt-5 text-center text-dark">
+                    <p>Your BMI is <span className='strong'>{bmiResult}</span>.</p>
+                    <p>You are <span className='strong'>{status}</span>.</p>
+                </div>
+            }
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-
-
-
-    </div>
-    </div>
-  )
-
-}
-calculateBmi() {
-  let val = this.state.weight / ((Math.pow(this.state.height, 2))) * 10000
-  this.setState({'val': val})
-  if (val < 18.5) {
-      this.setState({'info': 'Under Weight'})
-  } else if (val > 18.5 && val <= 24.9) {
-      this.setState({'info': 'Normal weight'})
-  } else if (val > 24.9 && val < 30) {
-      this.setState({'info': 'Overweight'})
-  } else {
-      this.setState({'info': 'Obesity'})
-  }
-  console.log(this.state.weight / (Math.pow(this.state.height, 2)))
-}
+    )
 }
 
-
-
-
-
-
-export default Bmi;
+export default Bmi
